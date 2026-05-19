@@ -13,7 +13,6 @@ class Test_UserEndpoints:
                 "hashed_password": "password123"
             }
             response = client.post("/users/", json=user_data)
-            new_user = UserResponse(**response.json())
             assert response.status_code == status.HTTP_201_CREATED
         
         def test_create_user_with_existing_email(self, client, test_unverified_user):
@@ -190,7 +189,6 @@ class TestUser_AdminEndpoints:
         def test_get_all_users_as_admin(self, test_users,authorized_client_user1):
             response = authorized_client_user1.get("/admins/users/")
             assert response.status_code == status.HTTP_200_OK
-            users = [UserAdminResponse(**user) for user in response.json()]
             assert len(response.json()) == len(test_users)+1  # +1 for the admin user
 
         def test_get_all_users_as_non_admin(self, authorized_client_user2):
@@ -324,7 +322,6 @@ class TestUser_AdminEndpoints:
             }
             response = authorized_client_user1.post("/admins/ban/users/", json=ban_data)
             assert response.status_code == status.HTTP_201_CREATED
-            banned_user = BanUserResponse(**response.json())
         
         def test_ban_user_with_invalid_ban_date(self, test_verify_user, authorized_client_user1):
             ban_data = {

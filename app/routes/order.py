@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
 from sqlalchemy.orm import Session
-from typing import Optional
 
 from .. import models, schemas, database, oauth2, utils
 from ..limiter import limiter
@@ -137,7 +136,7 @@ def get_canceled_orders(db: Session = Depends(database.get_db), current_user: mo
 
 
 @adminroute.get("/completing", response_model=list[schemas.OrderResponse])
-def get_canceled_orders(db: Session = Depends(database.get_db), current_user: models.User = Depends(oauth2.get_current_user)):
+def get_completed_orders(db: Session = Depends(database.get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     order = db.query(models.Order).filter(
         models.Order.status == models.OrderStatus.COMPLETED).all()
     return order
@@ -158,7 +157,7 @@ def make_the_order_shiping(id: int, db: Session = Depends(database.get_db), curr
 
 
 @adminroute.put("/completing/{id}", response_model=schemas.OrderResponse)
-def make_the_order_shiping(id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(oauth2.get_current_user)):
+def make_the_order_completing(id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(oauth2.get_current_user)):
 
     order = utils.get_order_or_404(id, db).first()
     if order.status == models.OrderStatus.CANCELLED or order.status == models.OrderStatus.PENDING or order.status == models.OrderStatus.ORDERED or order.status == models.OrderStatus.COMPLETED:

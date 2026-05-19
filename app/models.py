@@ -5,7 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum as pyEnum
 import secrets
-from app.database import Base,engine
+from app.database import Base
 
 
 class OrderStatus(str, pyEnum):

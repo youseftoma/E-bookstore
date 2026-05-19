@@ -42,12 +42,12 @@ def create_user(request: Request,create_user: schemas.CreateUser, db: Session = 
                             detail=f"the email {create_user.email} is already exist")
     user = models.User(**user_data)
     
-    if settings.TESTING == True:
+    if settings.TESTING:
         user.verify_gmail = True
         pass
     elif not notifications.send_verify_gmail(create_user.email,f"http://127.0.0.1:8000/users/verify_gmail/{user.token}") :
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"there is some problem in the server try again later")
+                            detail="there is some problem in the server try again later")
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -60,11 +60,11 @@ def verify_user_gmail(request: Request,token:str, db: Session = Depends(database
     user = db.query(models.User).filter(models.User.token == token).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Verification email successfully failed")
+                            detail="Verification email successfully failed")
     if db.query(models.BanUser).filter(models.BanUser.email == user.email).first():
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"the user with email {user.email} is banned")
-    if user.verify_gmail == True:
+    if user.verify_gmail:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"the user with email {user.email} has verification already")
     user.verify_gmail = True
@@ -80,7 +80,7 @@ def reset_password(request: Request,update_password: schemas.ResetPassword ,db: 
     
     utils.verify_not_banned_or_403(update_password.email,db)
     user = db.query(models.User).filter(models.User.email == update_password.email).first()
-    if  user == None or user.phone != utils.validate_phone(update_password.phone,update_password.region):
+    if  user is None or user.phone != utils.validate_phone(update_password.phone,update_password.region):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,detail="invalid credentials")
     user.hashed_password = utils.hash_password(update_password.new_password)
     db.commit()

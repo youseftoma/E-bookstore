@@ -1,0 +1,59 @@
+[project]
+name = "E-bookstore"
+version = "0.1.0"
+description = "this my first backend project"
+requires-python = ">=3.10"
+dependencies = [
+    "alembic==1.18.4",
+    "bcrypt==3.2.0",
+    "cryptography==46.0.5",
+    "dnspython==2.8.0",
+    "email-validator==2.3.0",
+    "fastapi==0.135.1",
+    "fastapi-cli==0.0.24",
+    "fastar==0.8.0",
+    "httpx==0.28.1",
+    "limits==5.8.0",
+    "passlib==1.7.4",
+    "phonenumbers==9.0.26",
+    "psycopg2==2.9.11",
+    "pydantic==2.12.5",
+    "pydantic-extra-types==2.11.1",
+    "pydantic-settings==2.13.1",
+    "python-dotenv==1.2.2",
+    "python-jose==3.5.0",
+    "python-multipart==0.0.22",
+    "PyYAML==6.0.3",
+    "sentry-sdk==2.54.0",
+    "slowapi==0.1.9",
+    "SQLAlchemy==2.0.48",
+    "uvicorn==0.42.0",]
+
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.3",
+    "pytest-env",
+    "ruff",]
+
+
+[tool.pytest.ini_options]
+# Set the default path where pytest should search for your test files
+testpaths = ["tests"]
+addopts = "-v -s --tb=short"
+python_files = ["test_*.py", "*_test.py"]
+
+[tool.pytest_env]
+# These variables will automatically inject into your environment ONLY during tests
+TESTING = "True"
+
+
+[tool.setuptools]
+packages = { find = {} }
+
+[project.scripts]
+run-my-app = "app.main:start"
+run-my-tests = "pytest.main:main"
