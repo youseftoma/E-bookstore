@@ -27,8 +27,8 @@ app.add_middleware(
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 
-def main():
-    uvicorn.run("app.project:app", host="127.0.0.1", port=8000)
+def start():
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8000)
 
 # Register a proper handler for RateLimitExceeded
 @app.exception_handler(RateLimitExceeded)
@@ -76,4 +76,4 @@ app.include_router(order.adminroute)
 app.include_router(orderitem.adminroute)
 
 if __name__ == "__main__":
-    main()
+    start()

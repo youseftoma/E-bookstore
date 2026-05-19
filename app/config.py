@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_TIME:  int
     SEDNER_EMAIL: str
     EMAIL_PASSWORD: str
-    TESTING: bool = False
+    TESTING: bool 
     # Use this for Pydantic v2
     model_config = SettingsConfigDict(env_file=".env")
 
