@@ -2,6 +2,7 @@
 name = "E-bookstore"
 version = "0.1.0"
 description = "this my first backend project"
+readme = "readme.md"
 requires-python = ">=3.10"
 dependencies = [
     "alembic==1.18.4",
